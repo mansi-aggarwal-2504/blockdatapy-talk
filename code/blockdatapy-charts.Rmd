@@ -1,0 +1,71 @@
+---
+title: "blockdatapy-charts"
+output: html_document
+date: "2023-07-07"
+---
+
+```{r}
+library("tidyverse")
+library("dplyr")
+library("ggplot2")
+```
+
+```{r}
+heights <- read.csv('heights.txt', sep = ' ')
+```
+
+```{r}
+names(heights)
+```
+
+```{r}
+heights_new <- heights %>% 
+       rename("Mh" = "Mheight",
+              "Dh" = "Dheight")
+
+heights_new
+```
+
+```{r}
+custom_colour <- c("Significant" = "#020497", 
+                   "Not Significant" = "#970202")
+```
+
+
+```{r}
+# Create the scatter plot with regression line
+p <- ggplot(heights_new, aes(x = Mh, y = Dh)) +
+  # geom_point() +
+  geom_point(color = "#022B97", size = 0.5, show.legend = TRUE) +
+   geom_text_repel(aes(label = ifelse(heights_new$Dh %in% boxplot.stats(heights_new$Dh)$out,
+                                     paste("(",round(Mh, 2), ",", round(Dh, 2),")"), "")),
+                  # nudge_x = 0.1, nudge_y = 0.1,
+                  size=3,
+                  color = "blue", max.overlaps = 15) +
+  geom_point(color = ifelse(heights_new$Dh %in% boxplot.stats(heights_new$Dh)$out, "#FF0000", "#022B97"),
+             size = 2, show.legend = TRUE) +
+  geom_smooth(method = "lm", se = FALSE, color = "#970210") +
+  labs(title = "Relationship Between Heights of Mother and Daugther",
+       subtitle = "Outliers are shown in red",
+       x = "Mother's Height",
+       y = "Daughter's Height") +
+  theme_minimal()
+
+# Add text labels to red outliers
+# outliers_labels <- subset(heights_new, Dh %in% boxplot.stats(Dh)$out)
+# p <- p + geom_text(data = outliers_labels, aes(label = round(Dh, 2)), nudge_y = 1)
+
+# Define colors and labels for the legend
+color_values <- c("All Points" = "#022B97", "Outliers" = "#FF0000")
+labels <- c("All Points", "Outliers")
+
+# Add legend for the different geom_point() layers
+p <- p + scale_color_manual(values = custom_colour)
+
+p
+
+ggsave("why-viz4-ggrepel.png", plot = p, width = 8, height = 6, dpi = 300)
+```
+
+
+
