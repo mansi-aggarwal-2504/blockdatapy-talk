@@ -6,5 +6,5 @@ I talked about creating impactful charts and graphs for enhanced data understand
 utilising colors harmoniously, and incorporating informative labeling.
 
 - :link: [Workshop slides](https://github.com/mansi-aggarwal-2504/blockdatapy-talk/tree/main/slides)
-- :movie_camera: Workshop recording - coming soon!
+- :movie_camera: [Workshop recording](https://lnkd.in/gRJQ6pcX)
 
